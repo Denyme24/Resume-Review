@@ -21,7 +21,7 @@ export function HeroHighlightDemo() {
         }}
       >
         <div className="layout flex flex-col justify-center items-center gap-10">
-          <div className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto mt-[-30vh] ">
+          <div className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto mt-[-15vh] ">
             Elevate recruitment with automation and precision for
             <br />
             <Highlight className="text-black dark:text-white">

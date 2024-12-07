@@ -147,11 +147,11 @@ export function PlaceholdersAndVanishInput({
     animateFrame(start);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !animating) {
-      vanishAndSubmit();
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === "Enter" && !animating) {
+  //     vanishAndSubmit();
+  //   }
+  // };
 
   // const vanishAndSubmit = () => {
   //   setAnimating(true);
@@ -194,7 +194,7 @@ export function PlaceholdersAndVanishInput({
             onChange && onChange(e);
           }
         }}
-        onKeyDown={handleKeyDown}
+        // onKeyDown={handleKeyDown}
         ref={inputRef}
         value={value}
         type="text"

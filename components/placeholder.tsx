@@ -25,10 +25,10 @@ export function Placeholders() {
   const handlejobDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setjobDesc(e.target.value);
   };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submitted");
-  };
+//   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+//     console.log("submitted");
+//   };
   return (
     <div className="flex flex-col justify-center  items-center px-4 w-[70vw] gap-5">
       <h2>Please Enter Job Titles</h2>
