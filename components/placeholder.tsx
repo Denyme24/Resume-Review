@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-import { FileUploadDemo } from "./file";
+import { FileUpload } from "./ui/file-upload";
+
 export function Placeholders() {
   const placeholders = [
     "Full Stack Developer",
@@ -17,35 +18,52 @@ export function Placeholders() {
     "Design and implement secure, scalable cloud-based infrastructures",
     " Identify vulnerabilities and implement measures to safeguard systems.",
   ];
-  const [jobTitle, setjobTitle] = useState("");
-  const [jobDesc, setjobDesc] = useState("");
-  const handlejobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setjobTitle(e.target.value);
+
+  const [jobTitle, setJobTitle] = useState("");
+  const [jobDesc, setJobDesc] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleJobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setJobTitle(e.target.value);
   };
-  const handlejobDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setjobDesc(e.target.value);
+
+  const handleJobDescChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setJobDesc(e.target.value);
   };
-  //   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     console.log("submitted");
-  //   };
+
+  const handleFilesChange = (newFiles: File[]) => {
+    setFiles(newFiles);
+  };
+
+  const handleSubmit = () => {
+    if (!jobTitle || !jobDesc || files.length === 0) {
+      setErrorMessage("Please fill all the fields and upload a file.");
+    } else {
+      setErrorMessage("");
+      // Proceed with form submission or other logic
+      console.log("Form submitted");
+    }
+  };
+
   return (
-    // you can either make a form and operate on "onsubmit" action
-    <div className="flex flex-col justify-center  items-center  px-4 w-[70vw] gap-5 mt-6">
+    <div className="flex flex-col justify-center items-center px-4 w-[70vw] gap-5 mt-6">
       <h2>Please Enter Job Titles</h2>
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
-        onChange={handlejobChange}
+        onChange={handleJobChange}
       />
       <h2>Please Enter Job Description</h2>
       <PlaceholdersAndVanishInput
         placeholders={placeholdersdesc}
-        onChange={handlejobDesc}
+        onChange={handleJobDescChange}
       />
-      <FileUploadDemo />
+      <FileUpload onChange={handleFilesChange} />
+      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
       <button
-        type="submit"
-        className="px-4 py-2 rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200 mt-[-10vh]"
+        type="button"
+        onClick={handleSubmit}
+        className="px-4 py-2 rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200"
       >
         Submit
       </button>
