@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-
+import { FileUploadDemo } from "./file";
 export function Placeholders() {
   const placeholders = [
     "Full Stack Developer",
@@ -25,12 +25,13 @@ export function Placeholders() {
   const handlejobDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setjobDesc(e.target.value);
   };
-//   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     console.log("submitted");
-//   };
+  //   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     console.log("submitted");
+  //   };
   return (
-    <div className="flex flex-col justify-center  items-center px-4 w-[70vw] gap-5">
+    // you can either make a form and operate on "onsubmit" action
+    <div className="flex flex-col justify-center  items-center  px-4 w-[70vw] gap-5 mt-6">
       <h2>Please Enter Job Titles</h2>
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
@@ -41,6 +42,13 @@ export function Placeholders() {
         placeholders={placeholdersdesc}
         onChange={handlejobDesc}
       />
+      <FileUploadDemo />
+      <button
+        type="submit"
+        className="px-4 py-2 rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200 mt-[-10vh]"
+      >
+        Submit
+      </button>
     </div>
   );
 }

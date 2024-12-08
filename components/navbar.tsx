@@ -3,7 +3,7 @@ import Link from "next/link";
 const Navbar = () => {
   return (
     <>
-      <nav className="fixed top-0 right-[56vh] w-[40vw] h-[7vh] p-3 rounded-full border-[2px] bg-white/30 backdrop-blur-md mt-1 border-indigo-500 z-[1000]">
+      <nav className="fixed top-0 right-[38vh] w-[60vw] h-[7vh] p-3 rounded-full border-[2px] bg-white/30 backdrop-blur-md mt-1 border-black z-[1000]">
         <ul className="flex justify-evenly items-center gap-8 cursor-pointer">
           <Link href={"/"}>
             <li>Home</li>
