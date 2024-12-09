@@ -16,7 +16,7 @@ export function Placeholders() {
     "Manage CI/CD pipelines and automate software deployment processes",
     "Extract insights from data using machine learning and statistical analysis",
     "Design and implement secure, scalable cloud-based infrastructures",
-    " Identify vulnerabilities and implement measures to safeguard systems.",
+    "Identify vulnerabilities and implement measures to safeguard systems.",
   ];
 
   const [jobTitle, setJobTitle] = useState("");
@@ -36,13 +36,62 @@ export function Placeholders() {
     setFiles(newFiles);
   };
 
-  const handleSubmit = () => {
+  const validateFiles = (): string | null => {
+    const validExtensions = [".pdf", ".docx"];
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+    for (const file of files) {
+      const extension = file.name.substring(file.name.lastIndexOf("."));
+      if (!validExtensions.includes(extension)) {
+        return `Invalid file format: ${
+          file.name
+        }. Allowed formats: ${validExtensions.join(", ")}`;
+      }
+      if (file.size > maxFileSize) {
+        return `File size too large: ${file.name}. Max size is 5MB.`;
+      }
+    }
+
+    return null;
+  };
+
+  const handleSubmit = async () => {
     if (!jobTitle || !jobDesc || files.length === 0) {
-      setErrorMessage("Please fill all the fields and upload a file.");
-    } else {
-      setErrorMessage("");
-      // Proceed with form submission or other logic
-      console.log("Form submitted");
+      setErrorMessage(
+        "Please fill all the fields and upload at least one file."
+      );
+      return;
+    }
+
+    const fileValidationError = validateFiles();
+    if (fileValidationError) {
+      setErrorMessage(fileValidationError);
+      return;
+    }
+
+    setErrorMessage("");
+
+    try {
+      const formData = new FormData();
+      formData.append("jobTitle", jobTitle);
+      formData.append("jobDesc", jobDesc);
+      files.forEach((file, index) => {
+        formData.append(`files`, file);
+      });
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      console.log("Form submitted", data);
+      setJobTitle("");
+      setJobDesc("");
+      setFiles([]);
+    } catch (error) {
+      console.error("Error submitting form", error);
+      setErrorMessage("An error occurred while submitting the form.");
     }
   };
 
@@ -51,11 +100,13 @@ export function Placeholders() {
       <h2>Please Enter Job Titles</h2>
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
+        value={jobTitle}
         onChange={handleJobChange}
       />
       <h2>Please Enter Job Description</h2>
       <PlaceholdersAndVanishInput
         placeholders={placeholdersdesc}
+        value={jobDesc}
         onChange={handleJobDescChange}
       />
       <FileUpload onChange={handleFilesChange} />
