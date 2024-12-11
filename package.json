@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tabler/icons-react": "^3.24.0",
+    "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "formidable": "^3.5.2",
@@ -18,7 +19,9 @@
     "lucide-react": "^0.468.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "^15.0.4",
+    "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^2.10.377",
     "raw-body": "^3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
