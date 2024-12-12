@@ -28,7 +28,7 @@ export function HeroHighlightDemo() {
               smarter, faster, and effortless hiring.
             </Highlight>
           </div>
-          <div className="buttons flex gap-4 justify-center items-center">
+          <div className="buttons md:flex md:flex-row gap-4 justify-center items-center flex flex-col">
             {/* button for get started */}
             <Link href={"/getstarted"}>
               <button className="px-6 py-3 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
@@ -36,7 +36,7 @@ export function HeroHighlightDemo() {
               </button>
             </Link>
             {/* button for documentation -> not functional */}
-            <button className="px-6 py-3 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
+            <button className="px-3 py-[11px] rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
               Documentation
             </button>
           </div>
