@@ -2,7 +2,9 @@
 import { useState } from "react";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { FileUpload } from "./ui/file-upload";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
 export function Placeholders() {
   const placeholders = [
     "Full Stack Developer",
@@ -89,6 +91,17 @@ export function Placeholders() {
       setJobTitle("");
       setJobDesc("");
       setFiles([]);
+      toast("✅Resume Submitted!", {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (error) {
       console.error("Error submitting form", error);
       setErrorMessage("An error occurred while submitting the form.");
@@ -96,28 +109,43 @@ export function Placeholders() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center px-4 w-[70vw] gap-5 mt-6">
-      <h2>Please Enter Job Titles</h2>
-      <PlaceholdersAndVanishInput
-        placeholders={placeholders}
-        value={jobTitle}
-        onChange={handleJobChange}
+    <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        // transition: Bounce,
       />
-      <h2>Please Enter Job Description</h2>
-      <PlaceholdersAndVanishInput
-        placeholders={placeholdersdesc}
-        value={jobDesc}
-        onChange={handleJobDescChange}
-      />
-      <FileUpload onChange={handleFilesChange} />
-      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-      <button
-        type="button"
-        onClick={handleSubmit}
-        className="px-4 py-2 rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200"
-      >
-        Submit
-      </button>
-    </div>
+      <div className="flex flex-col justify-center items-center px-4 w-[70vw] gap-5 mt-6">
+        <h2>Please Enter Job Titles</h2>
+        <PlaceholdersAndVanishInput
+          placeholders={placeholders}
+          value={jobTitle}
+          onChange={handleJobChange}
+        />
+        <h2>Please Enter Job Description</h2>
+        <PlaceholdersAndVanishInput
+          placeholders={placeholdersdesc}
+          value={jobDesc}
+          onChange={handleJobDescChange}
+        />
+        <FileUpload onChange={handleFilesChange} />
+        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="px-4 py-2 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200"
+        >
+          Submit
+        </button>
+      </div>
+    </>
   );
 }

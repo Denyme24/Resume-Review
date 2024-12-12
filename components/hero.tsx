@@ -31,12 +31,12 @@ export function HeroHighlightDemo() {
           <div className="buttons flex gap-4 justify-center items-center">
             {/* button for get started */}
             <Link href={"/getstarted"}>
-              <button className="px-6 py-3 rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
+              <button className="px-6 py-3 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
                 Get Started
               </button>
             </Link>
             {/* button for documentation -> not functional */}
-            <button className="px-6 py-3 rounded-md border border-black bg-white text-black text-sm hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
+            <button className="px-6 py-3 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200">
               Documentation
             </button>
           </div>
