@@ -5,6 +5,7 @@ import { FileUpload } from "./ui/file-upload";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
+
 export function Placeholders() {
   const placeholders = [
     "Full Stack Developer",
@@ -40,7 +41,7 @@ export function Placeholders() {
 
   const validateFiles = (): string | null => {
     const validExtensions = [".pdf", ".docx"];
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
+    const maxFileSize = 10 * 1024 * 1024;
 
     for (const file of files) {
       const extension = file.name.substring(file.name.lastIndexOf("."));
@@ -102,6 +103,10 @@ export function Placeholders() {
         theme: "light",
         transition: Bounce,
       });
+
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      }
     } catch (error) {
       console.error("Error submitting form", error);
       setErrorMessage("An error occurred while submitting the form.");
