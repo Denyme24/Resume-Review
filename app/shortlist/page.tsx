@@ -2,8 +2,10 @@
 import React from "react";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
 import Navbar from "@/components/navbar";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
+  const router = useRouter();
   const proceedFurther = async () => {
     const response = await fetch("/api/upload");
     const result = await response.json();
@@ -58,6 +60,7 @@ const page = () => {
 
     const matchResult = await response2.json();
     console.log(matchResult);
+    router.push("/result");
   };
   return (
     <>
@@ -85,4 +88,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

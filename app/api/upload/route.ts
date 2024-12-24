@@ -54,41 +54,47 @@ const cleanText = (rawText: string): string => {
 const extractStructuredData = (text: string) => {
   const structuredData: Record<string, string | string[]> = {};
 
-  // Extract Contact Information
-  const nameMatch = text.match(/^\w+ \w+/); // First two words as name (improve if needed)
+  // Flexible Contact Information Extraction
+  const nameMatch = text.match(/^\s*(?:Name[:\-]?)?\s*([a-zA-Z\s]{2,})/i);
   const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
   const phoneMatch = text.match(/(\+91[-\s]?)?\d{10}/);
-  const linkedinMatch = text.match(/(https?:\/\/)?(www\.)?linkedin\.com\/[^\s]+/i); // Enhanced LinkedIn regex
-  const githubMatch = text.match(/(https?:\/\/)?(www\.)?github\.com\/[^\s]+/i); // Enhanced GitHub regex
+  const linkedinMatch = text.match(/(https?:\/\/)?(www\.)?linkedin\.com\/[^\s]+/i);
+  const githubMatch = text.match(/(https?:\/\/)?(www\.)?github\.com\/[^\s]+/i);
 
-  structuredData.name = nameMatch ? nameMatch[0] : 'Unknown';
+  structuredData.name = nameMatch ? nameMatch[1].trim() : 'Unknown';
   structuredData.email = emailMatch ? emailMatch[0] : 'Unknown';
   structuredData.phone = phoneMatch ? phoneMatch[0] : 'Unknown';
   structuredData.linkedin = linkedinMatch ? linkedinMatch[0] : 'Not Provided';
   structuredData.github = githubMatch ? githubMatch[0] : 'Not Provided';
 
-  // Extract Technical Skills
-  const skillsMatch = text.match(/Technical Skills\s+([^\n]+)/i);
-  structuredData.skills = skillsMatch ? skillsMatch[1].split(/,\s*|\s+/).map(skill => skill.trim()) : [];
+  // Enhanced Skills Extraction
+  const skillsSectionMatch = text.match(/(skills|technical skills|languages|competencies|proficiencies|expertise)\s*[\:\-]?\s*([\s\S]+?)(\n{2,}|$)/i);
+  structuredData.skills = skillsSectionMatch
+    ? skillsSectionMatch[2]
+        .split(/[,;\n]/)
+        .map(skill => skill.trim())
+        .filter(skill => skill)
+    : [];
 
-  // Extract Experience - Enhanced to capture more variations
-  const experienceMatch = text.match(/Experience\s*[\:\-]?\s*([\s\S]+?)(Education|Skills|Projects|Achievements)/i);
-  structuredData.experience = experienceMatch ? experienceMatch[1].trim() : 'No Experience Found';
+  // Enhanced Experience Section Detection
+  const experienceMatch = text.match(/(experience|work experience|professional experience|employment history|career history|open source contributions)\s*[\:\-]?\s*([\s\S]+?)(\n{2,}|education|skills|projects|achievements|extracurricular)/i);
+  structuredData.experience = experienceMatch ? experienceMatch[2].trim() : 'No Experience Found';
 
-  // Extract Projects
-  const projectsMatch = text.match(/Projects\s+([\s\S]+?)Achievements/i);
-  structuredData.projects = projectsMatch ? projectsMatch[1].trim() : 'No Projects Found';
+  // Enhanced Projects Section Extraction
+  const projectsMatch = text.match(/(projects|notable projects|portfolio|case studies|research)\s*[\:\-]?\s*([\s\S]+?)(\n{2,}|achievements|experience|skills|extracurricular)/i);
+  structuredData.projects = projectsMatch ? projectsMatch[2].trim() : 'No Projects Found';
 
-  // Extract Achievements
-  const achievementsMatch = text.match(/Achievements\s+([\s\S]+?)$/i);
-  structuredData.achievements = achievementsMatch ? achievementsMatch[1].trim() : 'No Achievements Found';
+  // Enhanced Achievements Section Extraction
+  const achievementsMatch = text.match(/(achievements|awards|honors|extracurricular|certifications|accomplishments)\s*[\:\-]?\s*([\s\S]+?)$/i);
+  structuredData.achievements = achievementsMatch ? achievementsMatch[2].trim() : 'No Achievements Found';
 
-  // Extract Education
-  const educationMatch = text.match(/Education\s+([\s\S]+?)Technical Skills/i);
-  structuredData.education = educationMatch ? educationMatch[1].trim() : 'No Education Found';
+  // Enhanced Education Section Detection
+  const educationMatch = text.match(/(education|academic background|qualifications|academic qualifications|academic history|educational background)\s*[\:\-]?\s*([\s\S]+?)(\n{2,}|technical skills|skills|experience|projects)/i);
+  structuredData.education = educationMatch ? educationMatch[2].trim() : 'No Education Found';
 
   return structuredData;
 };
+
 // Function to validate the structured data
 const validateStructuredData = (data: Record<string, string | string[]>) => {
   // Check for missing or "Unknown" fields
