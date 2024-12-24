@@ -95,7 +95,7 @@ export function Placeholders() {
       toast("✅Resume Submitted!", {
         position: "bottom-right",
         autoClose: 1000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: false,
         draggable: true,
@@ -118,7 +118,7 @@ export function Placeholders() {
       <ToastContainer
         position="bottom-right"
         autoClose={1000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}

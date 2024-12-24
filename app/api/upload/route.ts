@@ -5,6 +5,9 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { Readable } from 'stream';
 import path from 'path';
 
+let storedFields: any = null; // In-memory store for fields
+let storedStructuredData: any = null; // In-memory store for structured data
+
 // Configure PDF.js
 pdfjsLib.GlobalWorkerOptions.workerSrc = path.join(process.cwd(), 'node_modules/pdfjs-dist/build/pdf.worker.js');
 
@@ -47,6 +50,7 @@ const cleanText = (rawText: string): string => {
 };
 
 // Function to extract structured data from the cleaned text
+// Function to extract structured data from the cleaned text
 const extractStructuredData = (text: string) => {
   const structuredData: Record<string, string | string[]> = {};
 
@@ -65,7 +69,7 @@ const extractStructuredData = (text: string) => {
 
   // Extract Technical Skills
   const skillsMatch = text.match(/Technical Skills\s+([^\n]+)/i);
-  structuredData.skills = skillsMatch ? skillsMatch[1].split(',').map(skill => skill.trim()) : [];
+  structuredData.skills = skillsMatch ? skillsMatch[1].split(/,\s*|\s+/).map(skill => skill.trim()) : [];
 
   // Extract Experience - Enhanced to capture more variations
   const experienceMatch = text.match(/Experience\s*[\:\-]?\s*([\s\S]+?)(Education|Skills|Projects|Achievements)/i);
@@ -85,7 +89,6 @@ const extractStructuredData = (text: string) => {
 
   return structuredData;
 };
-
 // Function to validate the structured data
 const validateStructuredData = (data: Record<string, string | string[]>) => {
   // Check for missing or "Unknown" fields
@@ -121,6 +124,7 @@ export async function POST(request: Request) {
     console.log("[UPLOAD API]: Form data parsed successfully.");
     console.log("[UPLOAD API]: Fields:", fields);
     console.log("[UPLOAD API]: Files:", files);
+    storedFields = fields;
 
     const fileArray = Array.isArray(files.files) ? files.files : [files.files];
     if (fileArray.length === 0) throw new Error("No files uploaded.");
@@ -130,7 +134,7 @@ export async function POST(request: Request) {
       const filePath = file.filepath;
       console.log(`[UPLOAD API]: Extracting text from PDF: ${file.originalFilename}`);
       const text = await extractTextFromPDF(filePath);
-      // *console.log(`[UPLOAD API]: Extracted text from ${file.originalFilename}: ${text}`);
+      // *console.log([UPLOAD API]: Extracted text from ${file.originalFilename}: ${text});
 
       // Clean the text
       const cleanedText = cleanText(text);
@@ -149,8 +153,24 @@ export async function POST(request: Request) {
       results.push({ fileName: file.originalFilename, structuredData });
     }
 
+    // Store the structured data
+    storedStructuredData = results.map(result => result.structuredData);
+
     // Include the redirect URL in the JSON response
-    return NextResponse.json({ results, redirectUrl: '/shortlist' });
+    return NextResponse.json({ fields, results, redirectUrl: '/shortlist' });
+  } catch (err) {
+    console.error("[UPLOAD API]: Error processing request:", err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// Handle GET request
+export async function GET() {
+  try {
+    if (!storedFields || !storedStructuredData) {
+      return NextResponse.json({ error: 'No data available' }, { status: 404 });
+    }
+    return NextResponse.json({ fields: storedFields, structuredData: storedStructuredData });
   } catch (err) {
     console.error("[UPLOAD API]: Error processing request:", err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -160,6 +180,6 @@ export async function POST(request: Request) {
 // Disable body parsing for Next.js (required for formidable)
 export const config = {
   api: {
-    bodyParser: false,
-  },
+    bodyParser: false,
+  },
 };
