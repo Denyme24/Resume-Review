@@ -19,7 +19,7 @@ app.add_middleware(
 
 # Load pre-trained Sentence-BERT model
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-
+results_store = []
 # Input schema for API
 class Resume(BaseModel):
     name: str
@@ -63,7 +63,11 @@ async def compare(request: CompareRequest):
             "similarity_score": round(float(similarity_score), 2),
             "message": "Comparison successful"
         })
-
+    results_store.extend(results)
     return {"results": results}
-
+@app.get("/results/")
+async def get_results():
+    if not results_store:
+        return {"message": "No results available"}
+    return {"results": results_store}
 # Run using: uvicorn compare:app --reload --host 127.0.0.1 --port 8001

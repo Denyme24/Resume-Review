@@ -4,18 +4,18 @@ import { HeroHighlight } from "@/components/ui/hero-highlight";
 import Navbar from "@/components/navbar";
 import { useRouter } from "next/navigation";
 
-const Page = () => {
+const Shortlist = () => {
   const router = useRouter();
+
   const proceedFurther = async () => {
     const response = await fetch("/api/upload");
     const result = await response.json();
     const jobDesc = result.fields.jobDesc[0];
     const resumeData = result.structuredData; //structured resume data
-    //* console.log(jobDesc);
+
     resumeData.forEach((resume, index) => {
       console.log(`Resume ${index + 1} Data:`, JSON.stringify(resume, null, 2));
     });
-    // console.log(result);
 
     const response1 = await fetch(
       "http://localhost:8000/parse-job-description",
@@ -31,22 +31,6 @@ const Page = () => {
     const parsedData = await response1.json(); //structured job description
     console.log(parsedData);
 
-    resumeData.forEach((resume, index) => {
-      if (!resume.skills || !resume.experience || !resume.education) {
-        console.error(`Resume ${index + 1} is missing required fields`);
-      }
-    });
-
-    console.log(
-      "Sending resumeData to comparison API:",
-      JSON.stringify(resumeData, null, 2)
-    );
-
-    console.log(
-      "Sending jdData to comparison API:",
-      JSON.stringify(parsedData, null, 2)
-    );
-
     const response2 = await fetch("http://localhost:8001/compare/", {
       method: "POST",
       headers: {
@@ -60,8 +44,13 @@ const Page = () => {
 
     const matchResult = await response2.json();
     console.log(matchResult);
-    router.push("/result");
+
+    const queryString = new URLSearchParams({
+      data: JSON.stringify(matchResult),
+    }).toString();
+    router.push(`/result?${queryString}`);
   };
+
   return (
     <>
       <Navbar />
@@ -88,4 +77,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Shortlist;
