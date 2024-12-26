@@ -1,11 +1,10 @@
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-import torch
+from sklearn.preprocessing import normalize
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -38,8 +37,9 @@ async def compare(request: CompareRequest):
     jd_text = request.jdData
     results = []
 
-    # Get embedding for job description
+    # Get embedding for job description and normalize
     jd_embedding = model.encode(jd_text)
+    jd_embedding = normalize([jd_embedding])[0]  # Normalize JD embedding
 
     for resume in request.resumes:
         # Combine all resume fields for semantic similarity
@@ -50,24 +50,29 @@ async def compare(request: CompareRequest):
             resume.education
         )
 
-        # Get embedding for resume
+        # Get embedding for resume and normalize
         resume_embedding = model.encode(resume_text)
+        resume_embedding = normalize([resume_embedding])[0]  # Normalize Resume embedding
 
-        # Calculate cosine similarity
+        # Calculate cosine similarity and apply scaling
         similarity_score = cosine_similarity([jd_embedding], [resume_embedding])[0][0]
+        scaled_score = min(similarity_score * 1.1, 1.0)  # Scale similarity score
 
         # Compile results
-        results.append({
+        result = {
             "name": resume.name,
             "email": resume.email,
-            "similarity_score": round(float(similarity_score), 2),
-            "message": "Comparison successful"
-        })
+            "overall_score": round(float(scaled_score), 2)
+        }
+        results.append(result)
     results_store.extend(results)
     return {"results": results}
+
+
 @app.get("/results/")
 async def get_results():
     if not results_store:
-        return {"message": "No results available"}
-    return {"results": results_store}
-# Run using: uvicorn compare:app --reload --host 127.0.0.1 --port 8001
+        raise HTTPException(status_code=404, detail="No results available")
+    results = results_store.copy()
+    results_store.clear()  # Clear the results store after returning the results
+    return {"results": results}

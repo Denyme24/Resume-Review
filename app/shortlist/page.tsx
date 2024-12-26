@@ -45,10 +45,7 @@ const Shortlist = () => {
     const matchResult = await response2.json();
     console.log(matchResult);
 
-    const queryString = new URLSearchParams({
-      data: JSON.stringify(matchResult),
-    }).toString();
-    router.push(`/result?${queryString}`);
+    router.push("/result");
   };
 
   return (
