@@ -129,7 +129,7 @@ export function Placeholders() {
         // transition: Bounce,
       />
       <div className="flex flex-col justify-center items-center px-4 w-[70vw] gap-5 mt-6">
-        <h2>Please Enter Job Titles</h2>
+        <h2>Please Enter Job Title</h2>
         <PlaceholdersAndVanishInput
           placeholders={placeholders}
           value={jobTitle}

@@ -49,13 +49,13 @@ const cleanText = (rawText: string): string => {
     .trim(); // Remove leading and trailing spaces
 };
 
-// Function to extract structured data from the cleaned text
+
 // Function to extract structured data from the cleaned text
 const extractStructuredData = (text: string) => {
   const structuredData: Record<string, string | string[]> = {};
 
   // Flexible Contact Information Extraction
-  const nameMatch = text.match(/^\s*(?:Name[:\-]?)?\s*([a-zA-Z\s]{2,})/i);
+  const nameMatch = text.match(/^\s*(?:Name[:\-]?)?\s*([A-Z][a-zA-Z]*\s+[A-Z][a-zA-Z]*)(?=\s*(?:Email|Phone|Address|$|\n|))/im);
   const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
   const phoneMatch = text.match(/(\+91[-\s]?)?\d{10}/);
   const linkedinMatch = text.match(/(https?:\/\/)?(www\.)?linkedin\.com\/[^\s]+/i);

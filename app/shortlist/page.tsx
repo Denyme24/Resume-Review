@@ -63,9 +63,9 @@ const Shortlist = () => {
             <button
               type="button"
               onClick={proceedFurther}
-              className="px-6 py-4 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200"
+              className="px-6 py-2 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200"
             >
-              Proceed Further
+              See Results
             </button>
           </div>
         </div>
