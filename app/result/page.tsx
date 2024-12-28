@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
 import Navbar from "@/components/navbar";
 import { CSSProperties } from "react";
+import Link from "next/link";
 
 interface Result {
   name: string;
@@ -46,7 +47,7 @@ const ResultPage = () => {
           </>
         ) : (
           <>
-            <div className="layout-res w-[50vw] flex flex-col items-center px-0">
+            <div className=" p-5 layout-res w-[50vw] flex flex-col items-center px-0">
               <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-4">
                   <h5 className="text-2xl font-bold leading-none text-gray-900 dark:text-white">
@@ -96,6 +97,14 @@ const ResultPage = () => {
                 </div>
               </div>
             </div>
+            <Link href={"/"}>
+              <button
+                type="button"
+                className="container mx-auto px-6 py-3 rounded-md border border-black bg-white text-black text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0)] transition duration-200"
+              >
+                Back to Home
+              </button>
+            </Link>
           </>
         )}
       </HeroHighlight>
