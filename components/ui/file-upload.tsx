@@ -34,15 +34,18 @@ export const FileUpload = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (newFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-    onChange && onChange([...files, ...newFiles]);
+    const updatedFiles = [...files, ...newFiles];
+    setFiles(updatedFiles);
+    if (onChange) {
+      onChange(updatedFiles);
+    }
   };
 
   const handleClick = () => {
     fileInputRef.current?.click();
   };
 
-  const { getRootProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     multiple: false,
     noClick: true,
     onDrop: handleFileChange,
@@ -59,6 +62,7 @@ export const FileUpload = ({
         className="group/file block rounded-lg cursor-pointer w-full relative overflow-hidden"
       >
         <input
+          {...getInputProps()}
           ref={fileInputRef}
           id="file-upload-handle"
           type="file"

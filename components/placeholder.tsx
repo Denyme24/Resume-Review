@@ -72,13 +72,20 @@ export function Placeholders() {
       return;
     }
 
+    if (jobDesc.trim().split(/\s+/).length < 100) {
+      setErrorMessage(
+        "Please enter a more detailed job description.(100 Words)"
+      );
+      return;
+    }
+
     setErrorMessage("");
 
     try {
       const formData = new FormData();
       formData.append("jobTitle", jobTitle);
       formData.append("jobDesc", jobDesc);
-      files.forEach((file, index) => {
+      files.forEach((file) => {
         formData.append(`files`, file);
       });
 

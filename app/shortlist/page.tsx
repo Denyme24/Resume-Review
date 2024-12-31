@@ -4,16 +4,27 @@ import { HeroHighlight } from "@/components/ui/hero-highlight";
 import Navbar from "@/components/navbar";
 import { useRouter } from "next/navigation";
 
+interface StructuredData {
+  [key: string]: string | string[];
+}
+
+interface ApiResponse {
+  fields: {
+    jobDesc: string[];
+  };
+  structuredData: StructuredData[];
+}
+
 const Shortlist = () => {
   const router = useRouter();
 
   const proceedFurther = async () => {
     const response = await fetch("/api/upload");
-    const result = await response.json();
+    const result: ApiResponse = await response.json();
     const jobDesc = result.fields.jobDesc[0];
-    const resumeData = result.structuredData; //structured resume data
+    const resumeData: StructuredData[] = result.structuredData; // structured resume data
 
-    resumeData.forEach((resume, index) => {
+    resumeData.forEach((resume: StructuredData, index: number) => {
       console.log(`Resume ${index + 1} Data:`, JSON.stringify(resume, null, 2));
     });
 
@@ -28,7 +39,7 @@ const Shortlist = () => {
       }
     );
 
-    const parsedData = await response1.json(); //structured job description
+    const parsedData = await response1.json(); // structured job description
     console.log(parsedData);
 
     const response2 = await fetch("http://localhost:8001/compare/", {
