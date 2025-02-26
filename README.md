@@ -6,6 +6,12 @@ Elevate your recruitment game with a tool that combines automation and precision
 
 This project helps you shortlist the best resumes based on the job description you provide. It checks for matching skills from the given job description and the resumes, and based on the matching skills, it assigns a similarity score that helps determine the most relevant resume among all.
 
+## Demo Video
+
+Watch the demo video to see Resume Review in action:
+
+[![Resume Review Demo](/public/resume-shortlist.mp4)](/public/resume-shortlist.mp4)
+
 ## Tech Stack
 
 - **Frontend:**
